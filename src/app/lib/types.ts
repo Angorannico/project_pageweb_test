@@ -1,0 +1,61 @@
+export interface Product {
+    id: number;
+    name: string;
+    slug: string;
+    permalink: string;
+    description: string;
+    short_description: string;
+    sku: string;
+    price: string;
+    regular_price: string;
+    sale_price: string;
+    on_sale: boolean;
+    stock_status: 'instock' | 'outofstock' | 'onbackorder';
+    stock_quantity: number | null;
+    images: ProductImage[];
+    categories: ProductCategory[];
+    attributes: ProductAttribute[];
+    variations: number[];
+    meta_data: MetaData[];
+  }
+  
+  export interface ProductImage {
+    id: number;
+    src: string;
+    name: string;
+    alt: string;
+  }
+  
+  export interface ProductCategory {
+    id: number;
+    name: string;
+    slug: string;
+  }
+  
+  export interface ProductAttribute {
+    id: number;
+    name: string;
+    options: string[];
+  }
+  
+  export interface MetaData {
+    id: number;
+    key: string;
+    value: string;
+  }
+  
+  export interface CartItem {
+    id: number;
+    quantity: number;
+    product: Product;
+    variation_id?: number;
+  }
+  
+  export interface Cart {
+    items: CartItem[];
+    total: number;
+    subtotal: number;
+    tax: number;
+    shipping: number;
+  }
+  
