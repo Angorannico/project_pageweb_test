@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { wooCommerce } from '../../lib/api/woocommerce'
 import { ProductCategory } from '../../lib/types'
 
@@ -7,8 +6,12 @@ export async function CategorySection() {
   try {
     const categories = await wooCommerce.getCategories() as ProductCategory[]
     
-    // Filtrar categorías principales (sin parent)
-    const mainCategories = categories.filter(cat => !cat.parent).slice(0, 6)
+    // Filtrar categorías principales (sin parent o parent = 0)
+    const mainCategories = categories.filter(cat => !cat.parent || cat.parent === 0).slice(0, 6)
+
+    if (!mainCategories || mainCategories.length === 0) {
+      return null
+    }
 
     return (
       <section className="py-16 bg-gray-50">
@@ -30,7 +33,6 @@ export async function CategorySection() {
                 className="group bg-white rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200"
               >
                 <div className="w-16 h-16 mx-auto mb-4 bg-primary-100 rounded-full flex items-center justify-center group-hover:bg-primary-200 transition-colors">
-                  {/* Iconos por categoría */}
                   {getCategoryIcon(category.name)}
                 </div>
                 <h3 className="font-semibold text-secondary-800 group-hover:text-primary-500 transition-colors">
@@ -74,3 +76,4 @@ function getCategoryIcon(categoryName: string) {
     </svg>
   )
 }
+

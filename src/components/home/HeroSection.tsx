@@ -1,6 +1,3 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { Button } from '../ui/Button'
 import { ArrowRight, Shield, Truck, Award } from 'lucide-react'
 
 export function HeroSection() {
@@ -25,17 +22,19 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" asChild>
-                <Link href="/tienda">
-                  Ver Catálogo
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/contacto">
-                  Cotizar Proyecto
-                </Link>
-              </Button>
+              <a
+                href="/tienda"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary-500 hover:bg-primary-600 text-white focus:ring-primary-500 rounded-lg"
+              >
+                Ver Catálogo
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </a>
+              <a
+                href="/contacto"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-500 rounded-lg"
+              >
+                Cotizar Proyecto
+              </a>
             </div>
 
             {/* Trust Indicators */}
@@ -51,7 +50,7 @@ export function HeroSection() {
                 <Truck className="h-8 w-8 text-primary-500" />
                 <div>
                   <div className="font-semibold text-secondary-800">Envío</div>
-                  <div className="text-sm text-secondary-600">Gratis mayor a $200k</div>
+                  <div className="text-sm text-secondary-600">Gratis &gt;$200k</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
@@ -67,14 +66,13 @@ export function HeroSection() {
           {/* Hero Image */}
           <div className="relative">
             <div className="relative z-10">
-              <Image
-                src="/hero-ceramics.jpg"
-                alt="Cerámicas de construcción profesional"
-                width={600}
-                height={500}
-                className="rounded-2xl shadow-2xl"
-                priority
-              />
+              <div className="aspect-[4/3] bg-gray-200 rounded-2xl shadow-2xl flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-6xl mb-4">🏗️</div>
+                  <p className="text-gray-600">Imagen Hero</p>
+                  <p className="text-sm text-gray-500">600x500px</p>
+                </div>
+              </div>
             </div>
             {/* Decorative elements */}
             <div className="absolute -top-4 -right-4 w-72 h-72 bg-primary-100 rounded-full opacity-20 -z-10" />
@@ -85,3 +83,4 @@ export function HeroSection() {
     </section>
   )
 }
+

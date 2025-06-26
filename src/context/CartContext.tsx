@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useReducer, ReactNode } from 'react'
-import { Product, CartItem, Cart } from '../lib/types'
+import { Product, CartItem } from '../lib/types' // Removido Cart import
 
 interface CartState {
   items: CartItem[]
