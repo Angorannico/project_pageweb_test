@@ -1,76 +1,105 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { wooCommerce } from '../../lib/api/woocommerce'
-import { ProductCategory } from '../../lib/types'
+'use client'
 
-export async function CategorySection() {
-  try {
-    const categories = await wooCommerce.getCategories() as ProductCategory[]
-    
-    // Filtrar categorías principales (sin parent)
-    const mainCategories = categories.filter(cat => !cat.parent).slice(0, 6)
+import { useCart } from '../../context/CartContext'
+import { Button } from '../ui/Button'
+import { formatPrice } from '../../lib/utils'
+import { ShoppingCart, ArrowRight } from 'lucide-react'
 
-    return (
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-display font-bold text-secondary-800 mb-4">
-              Explora por Categorías
-            </h2>
-            <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
-              Encuentra exactamente lo que necesitas para tu proyecto
+export function CartSummary() {
+  const { subtotal, tax, shipping, total, itemCount } = useCart()
+
+  const handleCheckout = () => {
+    window.location.href = '/checkout'
+  }
+
+  const handleContinueShopping = () => {
+    window.location.href = '/tienda'
+  }
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-8">
+      <h2 className="text-xl font-display font-bold text-secondary-800 mb-6">
+        Resumen del Pedido
+      </h2>
+
+      <div className="space-y-4 mb-6">
+        <div className="flex justify-between items-center">
+          <span className="text-secondary-600">Subtotal ({itemCount} productos)</span>
+          <span className="font-semibold">{formatPrice(subtotal)}</span>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <span className="text-secondary-600">IVA (19%)</span>
+          <span className="font-semibold">{formatPrice(tax)}</span>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <span className="text-secondary-600">Envío</span>
+          <span className="font-semibold">
+            {shipping === 0 ? (
+              <span className="text-green-600">Gratis</span>
+            ) : (
+              formatPrice(shipping)
+            )}
+          </span>
+        </div>
+
+        {shipping === 0 && subtotal > 0 && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+            <p className="text-sm text-green-700">
+              🎉 ¡Felicidades! Tienes envío gratis
             </p>
           </div>
+        )}
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {mainCategories.map((category) => (
-              <Link
-                key={category.id}
-                href={`/tienda?categoria=${category.id}`}
-                className="group bg-white rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200"
-              >
-                <div className="w-16 h-16 mx-auto mb-4 bg-primary-100 rounded-full flex items-center justify-center group-hover:bg-primary-200 transition-colors">
-                  {/* Iconos por categoría */}
-                  {getCategoryIcon(category.name)}
-                </div>
-                <h3 className="font-semibold text-secondary-800 group-hover:text-primary-500 transition-colors">
-                  {category.name}
-                </h3>
-              </Link>
-            ))}
+        <div className="border-t border-gray-200 pt-4">
+          <div className="flex justify-between items-center">
+            <span className="text-lg font-bold text-secondary-800">Total</span>
+            <span className="text-2xl font-bold text-secondary-800">
+              {formatPrice(total)}
+            </span>
           </div>
         </div>
-      </section>
-    )
-  } catch (error) {
-    console.error('Error fetching categories:', error)
-    return null
-  }
-}
+      </div>
 
-function getCategoryIcon(categoryName: string) {
-  const iconClass = "h-8 w-8 text-primary-500"
-  
-  if (categoryName.toLowerCase().includes('piso')) {
-    return (
-      <svg className={iconClass} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-      </svg>
-    )
-  }
-  
-  if (categoryName.toLowerCase().includes('azulejo')) {
-    return (
-      <svg className={iconClass} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-      </svg>
-    )
-  }
-  
-  // Icono por defecto
-  return (
-    <svg className={iconClass} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-    </svg>
+      <div className="space-y-3">
+        <Button 
+          onClick={handleCheckout}
+          className="w-full" 
+          size="lg"
+        >
+          Proceder al Checkout
+          <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
+
+        <Button 
+          variant="outline" 
+          onClick={handleContinueShopping}
+          className="w-full"
+        >
+          <ShoppingCart className="mr-2 h-4 w-4" />
+          Continuar Comprando
+        </Button>
+      </div>
+
+      {/* Trust Indicators */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="space-y-2 text-sm text-secondary-600">
+          <div className="flex items-center space-x-2">
+            <span>🔒</span>
+            <span>Compra 100% segura</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span>🚚</span>
+            <span>Envío gratis en compras &gt;$200k</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span>↩️</span>
+            <span>30 días para devoluciones</span>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
+

@@ -37,7 +37,7 @@ const mockAddresses: Address[] = [
 ]
 
 export function AddressBook() {
-  const [addresses, setAddresses] = useState<Address[]>(mockAddresses)
+  const [addresses] = useState<Address[]>(mockAddresses) // Removido setAddresses
   const [showForm, setShowForm] = useState(false)
 
   if (addresses.length === 0 && !showForm) {
