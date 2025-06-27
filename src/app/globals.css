@@ -1,15 +1,147 @@
 @import "tailwindcss";
 
-:root {
+/*:root {
   --background: #ffffff;
   --foreground: #171717;
+}*/
+
+@theme {
+  /* COLORES PERSONALIZADOS PARA V4 */
+  /* Azul cerámico */
+  --color-ceramic-blue: #2A6FA1;
+  --color-hover-blue: #0B5ED7;
+  
+  /* Grises */
+  --color-dark-gray: #1f2937;
+  --color-light-gray: #E5E7EB;
+  --color-pure-white: #FFFFFF;
+  
+  /* Terracota */
+  --color-soft-terracotta: #C97E63;
+  --color-logo-brown: #6B4E3D;
+  
+  /* Colores de texto mejorados */
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #374151;
+  --color-text-muted: #4b5563;
+  --color-text-light: #6b7280;
+  
+  /* Colores de bordes mejorados */
+  --color-border-light: #d1d5db;
+  --color-border-medium: #9ca3af;
+  --color-border-dark: #6b7280;
+  --color-border-darker: #4b5563;
+  
+  /* Paleta primary */
+  --color-primary-50: #f0f8ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #2A6FA1;
+  --color-primary-600: #1e5a8a;
+  --color-primary-700: #1e40af;
+  --color-primary-800: #1e3a8a;
+  --color-primary-900: #1e293b;
+  
+  /* Paleta secondary */
+  --color-secondary-50: #f9fafb;
+  --color-secondary-100: #f3f4f6;
+  --color-secondary-200: #E5E7EB;
+  --color-secondary-300: #d1d5db;
+  --color-secondary-400: #9ca3af;
+  --color-secondary-500: #6b7280;
+  --color-secondary-600: #4b5563;
+  --color-secondary-700: #374151;
+  --color-secondary-800: #1f2937;
+  --color-secondary-900: #111827;
+  
+  /* Paleta accent */
+  --color-accent-50: #fef7ed;
+  --color-accent-100: #fef3e2;
+  --color-accent-200: #fde4c4;
+  --color-accent-300: #fbd5a6;
+  --color-accent-400: #f9c088;
+  --color-accent-500: #C97E63;
+  --color-accent-600: #b86b4f;
+  --color-accent-700: #a7583b;
+  --color-accent-800: #964527;
+  --color-accent-900: #6B4E3D;
+  
+  /* Fuentes */
+  --font-family-sans: Inter, system-ui, sans-serif;
+  --font-family-display: Poppins, system-ui, sans-serif;
+  
+  /* Animaciones */
+  --animate-duration-300: 300ms;
+  --animate-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  
+  /* Sombras personalizadas */
+  --shadow-ceramic: 0 4px 6px -1px rgba(42, 111, 161, 0.1), 0 2px 4px -1px rgba(42, 111, 161, 0.06);
+  --shadow-terracotta: 0 4px 6px -1px rgba(201, 126, 99, 0.1), 0 2px 4px -1px rgba(201, 126, 99, 0.06);
+  --shadow-ceramic-lg: 0 10px 15px -3px rgba(42, 111, 161, 0.1), 0 4px 6px -2px rgba(42, 111, 161, 0.05);
+  --shadow-terracotta-lg: 0 10px 15px -3px rgba(201, 126, 99, 0.1), 0 4px 6px -2px rgba(201, 126, 99, 0.05);
+  --shadow-hover-glow: 0 8px 25px -8px rgba(11, 94, 215, 0.4);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Gradientes personalizados */
+@layer utilities {
+  .bg-gradient-categories {
+    background: linear-gradient(135deg, #f0f8ff 0%, #e0f2fe 50%, #bae6fd 100%);
+  }
+  
+  .bg-gradient-terracotta {
+    background: linear-gradient(135deg, #C97E63 0%, #b86b4f 100%);
+  }
+  
+  .bg-gradient-hero {
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 50%, #f3f4f6 100%);
+  }
+}
+
+/* Animaciones personalizadas */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounceSubtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(201, 126, 99, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(201, 126, 99, 0.6); }
+}
+
+.animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+.animate-slide-up { animation: slideUp 0.3s ease-out; }
+.animate-bounce-subtle { animation: bounceSubtle 0.6s ease-out; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-glow { animation: glow 2s ease-in-out infinite alternate; }
+
+/* Estilos base */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: var(--font-family-sans);
+    color: var(--color-text-primary);
+    background-color: var(--color-pure-white);
+  }
 }
 
 /*@media (prefers-color-scheme: dark) {
@@ -21,6 +153,6 @@
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  /*color: var(--foreground);*/
   font-family: Arial, Helvetica, sans-serif;
 }

@@ -5,62 +5,74 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        // Tu paleta personalizada exacta
+        // IMPORTANTE: Usar nombres sin guiones para mejor compatibilidad
         primary: {
-          50: '#f0f8ff',   // Azul muy claro
-          100: '#e0f2fe',  // Azul claro
-          200: '#bae6fd',  // Azul suave
-          300: '#7dd3fc',  // Azul medio-claro
-          400: '#38bdf8',  // Azul medio
-          500: '#2A6FA1',  // Azul cerámico principal
-          600: '#1e5a8a',  // Azul más oscuro
-          700: '#1e40af',  // Azul profundo
-          800: '#1e3a8a',  // Azul muy oscuro
-          900: '#1e293b',  // Azul casi negro
+          50: '#f0f8ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#2A6FA1',
+          600: '#1e5a8a',
+          700: '#1e40af',
+          800: '#1e3a8a',
+          900: '#1e293b',
         },
         secondary: {
-          50: '#f9fafb',   // Gris muy claro
-          100: '#f3f4f6',  // Gris claro
-          200: '#E5E7EB',  // Gris claro (tu color)
-          300: '#d1d5db',  // Gris medio-claro
-          400: '#9ca3af',  // Gris medio
-          500: '#6b7280',  // Gris
-          600: '#4b5563',   // MEJORADO: Gris medio-oscuro para texto secundario
-          700: '#374151',   // MEJORADO: Gris más oscuro para texto importante
-          800: '#1f2937',   // MEJORADO: Gris muy oscuro para texto principal 
-          900: '#111827',   // MEJORADO: Casi negro para títulos principales
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#E5E7EB',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
         },
         accent: {
-          50: '#fef7ed',   // Terracota muy claro
-          100: '#fef3e2',  // Terracota claro
-          200: '#fde4c4',  // Terracota suave claro
-          300: '#fbd5a6',  // Terracota medio-claro
-          400: '#f9c088',  // Terracota medio
-          500: '#C97E63',  // Terracota suave (tu color)
-          600: '#b86b4f',  // Terracota más oscuro
-          700: '#a7583b',  // Terracota oscuro
-          800: '#964527',  // Terracota muy oscuro
-          900: '#6B4E3D',  // Marrón del logo
+          50: '#fef7ed',
+          100: '#fef3e2',
+          200: '#fde4c4',
+          300: '#fbd5a6',
+          400: '#f9c088',
+          500: '#C97E63',
+          600: '#b86b4f',
+          700: '#a7583b',
+          800: '#964527',
+          900: '#6B4E3D',
         },
-        // Colores específicos de tu marca
-        'ceramic-blue': '#2A6FA1',
-        'dark-gray': '#333333',
-        'light-gray': '#E5E7EB',
-        'pure-white': '#FFFFFF',
-        'soft-terracotta': '#C97E63',
-        'logo-brown': '#6B4E3D',
-        'text-primary': '#1f2937',      // Gris muy oscuro para texto principal
-        'text-secondary': '#374151',    // Gris oscuro para texto secundario  
-        'text-muted': '#4b5563',        // Gris medio para texto auxiliar
-        'text-light': '#6b7280',       // Gris claro para texto menos importante
+        // CORREGIDO: Colores específicos con nombres válidos
+        ceramicBlue: '#2A6FA1',
+        hoverBlue: '#0B5ED7',
+        darkGray: '#1f2937',
+        lightGray: '#E5E7EB',
+        pureWhite: '#FFFFFF',
+        softTerracotta: '#C97E63',
+        logoBrown: '#6B4E3D',
+        textPrimary: '#1f2937',
+        textSecondary: '#374151',
+        textMuted: '#4b5563',
+        textLight: '#6b7280',
+        borderLight: '#d1d5db',
+        borderMedium: '#9ca3af',
+        borderDark: '#6b7280',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Poppins', 'system-ui', 'sans-serif'],
+      },
+      backgroundImage: {
+        'gradient-categories': 'linear-gradient(135deg, #f0f8ff 0%, #e0f2fe 50%, #bae6fd 100%)',
+        'gradient-terracotta': 'linear-gradient(135deg, #C97E63 0%, #b86b4f 100%)',
+        'gradient-hero': 'linear-gradient(135deg, #f9fafb 0%, #ffffff 50%, #f3f4f6 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-in-out',
@@ -68,6 +80,7 @@ const config: Config = {
         'scale-in': 'scaleIn 0.2s ease-out',
         'bounce-subtle': 'bounceSubtle 0.6s ease-out',
         'glow': 'glow 2s ease-in-out infinite alternate',
+        'float': 'float 3s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -90,12 +103,17 @@ const config: Config = {
           '0%': { boxShadow: '0 0 5px rgba(201, 126, 99, 0.3)' },
           '100%': { boxShadow: '0 0 20px rgba(201, 126, 99, 0.6)' },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
       },
       boxShadow: {
         'ceramic': '0 4px 6px -1px rgba(42, 111, 161, 0.1), 0 2px 4px -1px rgba(42, 111, 161, 0.06)',
         'terracotta': '0 4px 6px -1px rgba(201, 126, 99, 0.1), 0 2px 4px -1px rgba(201, 126, 99, 0.06)',
         'ceramic-lg': '0 10px 15px -3px rgba(42, 111, 161, 0.1), 0 4px 6px -2px rgba(42, 111, 161, 0.05)',
         'terracotta-lg': '0 10px 15px -3px rgba(201, 126, 99, 0.1), 0 4px 6px -2px rgba(201, 126, 99, 0.05)',
+        'hover-glow': '0 8px 25px -8px rgba(11, 94, 215, 0.4)',
       },
     },
   },
@@ -103,3 +121,4 @@ const config: Config = {
 }
 
 export default config
+

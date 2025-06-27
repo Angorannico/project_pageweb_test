@@ -33,6 +33,35 @@ const mockProducts: Product[] = [
     attributes: [],
     variations: [],
     meta_data: []
+  },
+  {
+    id: 2,
+    name: 'Porcelanato Gris 60x60',
+    slug: 'porcelanato-gris-60x60',
+    permalink: '',
+    description: 'Porcelanato de alta resistencia',
+    short_description: 'Ideal para espacios comerciales',
+    sku: 'PG-002',
+    price: '45000',
+    regular_price: '50000',
+    sale_price: '45000',
+    on_sale: true,
+    stock_status: 'instock',
+    stock_quantity: 50,
+    images: [
+      {
+        id: 2,
+        src: '/placeholder-product.jpg',
+        name: 'Porcelanato Gris',
+        alt: 'Porcelanato Gris'
+      }
+    ],
+    categories: [
+      { id: 2, name: 'Porcelanatos', slug: 'porcelanatos' }
+    ],
+    attributes: [],
+    variations: [],
+    meta_data: []
   }
 ];
 
@@ -46,13 +75,13 @@ export async function FeaturedProducts() {
     const productsToShow = products && products.length > 0 ? products : mockProducts;
 
     return (
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-pure-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-display font-bold text-secondary-800 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
               Productos Destacados
             </h2>
-            <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
+            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
               Descubre nuestra selección de cerámicas más populares entre profesionales
             </p>
           </div>
@@ -63,13 +92,14 @@ export async function FeaturedProducts() {
             ))}
           </div>
 
+          {/* CORREGIDO: Botón con mismos colores que "Cotizar Proyecto" */}
           <div className="text-center mt-12">
             <a
               href="/tienda"
-              className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-500 rounded-lg"
+              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold bg-soft-terracotta hover:bg-accent-600 text-pure-white rounded-lg transition-all duration-300 ease-out hover:transform hover:-translate-y-1 hover:shadow-terracotta-lg border border-soft-terracotta hover:border-accent-600 group"
             >
               Ver Todos los Productos
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
             </a>
           </div>
         </div>
@@ -79,15 +109,14 @@ export async function FeaturedProducts() {
     console.error('Error fetching featured products:', error)
     
     return (
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-pure-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-display font-bold text-secondary-800 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
             Productos Destacados
           </h2>
-          <p className="text-secondary-600">Error al cargar productos destacados</p>
+          <p className="text-text-secondary">Error al cargar productos destacados</p>
         </div>
       </section>
     )
   }
 }
-
