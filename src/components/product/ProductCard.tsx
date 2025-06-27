@@ -83,51 +83,58 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
-        {/* Category */}
-        {product.categories.length > 0 && (
-          <p className="text-xs text-primary-500 font-medium mb-1">
-            {product.categories[0].name}
-          </p>
-        )}
+<div className="p-4">
+  {/* Category */}
+  {product.categories.length > 0 && (
+    <p className="text-xs text-ceramic-blue font-semibold mb-1 uppercase tracking-wide">
+      {product.categories[0].name}
+    </p>
+  )}
 
-        {/* Product Name */}
-        <h3 className="font-semibold text-secondary-800 mb-2 line-clamp-2 group-hover:text-primary-500 transition-colors">
-          <Link href={`/productos/${product.slug}`}>
-            {product.name}
-          </Link>
-        </h3>
+  {/* Product Name - MÁS OSCURO Y DESTACADO */}
+  <h3 className="font-bold text-dark-gray mb-2 line-clamp-2 group-hover:text-ceramic-blue transition-colors duration-300 text-base leading-tight">
+    <Link href={`/productos/${product.slug}`}>
+      {product.name}
+    </Link>
+  </h3>
 
-        {/* Price */}
-        <div className="flex items-center space-x-2 mb-3">
-          {isOnSale ? (
-            <>
-              <span className="text-lg font-bold text-accent-500">
-                {formatPrice(product.sale_price)}
-              </span>
-              <span className="text-sm text-gray-500 line-through">
-                {formatPrice(product.regular_price)}
-              </span>
-            </>
-          ) : (
-            <span className="text-lg font-bold text-secondary-800">
-              {formatPrice(product.price)}
-            </span>
-          )}
-        </div>
+  {/* Short Description - MEJORADA LEGIBILIDAD */}
+  {product.short_description && (
+    <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
+      {product.short_description.replace(/<[^>]*>/g, '')}
+    </p>
+  )}
 
-        {/* Add to Cart Button */}
-        <Button
-          onClick={handleAddToCart}
-          disabled={!isInStock || isLoading}
-          loading={isLoading}
-          className="w-full"
-          size="sm"
-        >
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          {!isInStock ? 'Agotado' : 'Agregar al Carrito'}
-        </Button>
-      </div>
-    </div>
+  {/* Price */}
+  <div className="flex items-center space-x-2 mb-3">
+    {isOnSale ? (
+      <>
+        <span className="text-lg font-bold text-soft-terracotta">
+          {formatPrice(product.sale_price)}
+        </span>
+        <span className="text-sm text-gray-500 line-through">
+          {formatPrice(product.regular_price)}
+        </span>
+      </>
+    ) : (
+      <span className="text-lg font-bold text-dark-gray">
+        {formatPrice(product.price)}
+      </span>
+    )}
+  </div>
+
+  {/* Add to Cart Button */}
+  <Button
+    onClick={handleAddToCart}
+    disabled={!isInStock || isLoading}
+    loading={isLoading}
+    className="w-full"
+    size="sm"
+  >
+    <ShoppingCart className="h-4 w-4 mr-2" />
+    {!isInStock ? 'Agotado' : 'Agregar al Carrito'}
+  </Button>
+  </div>
+  </div>
   )
 }

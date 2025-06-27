@@ -8,6 +8,7 @@ interface SearchParams {
   precio_max?: string
   ordenar?: string
   pagina?: string
+  buscar?: string // NUEVO PARÁMETRO
 }
 
 interface ProductGridProps {
@@ -20,6 +21,11 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
     const queryParams: Record<string, string> = {
       per_page: '12',
       page: searchParams.pagina || '1',
+    }
+
+    // NUEVO: Filtro por búsqueda
+    if (searchParams.buscar) {
+      queryParams.search = searchParams.buscar
     }
 
     // Filtro por categoría
@@ -66,14 +72,20 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
         <div className="text-center py-12">
           <div className="text-gray-400 mb-4">
             <svg className="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8V4a1 1 0 00-1-1H7a1 1 0 00-1 1v1m8 0V4.5" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-secondary-800 mb-2">
-            No se encontraron productos
+          <h3 className="text-lg font-medium text-dark-gray mb-2">
+            {searchParams.buscar ? 
+              `No se encontraron productos para "${searchParams.buscar}"` : 
+              'No se encontraron productos'
+            }
           </h3>
-          <p className="text-secondary-600">
-            Intenta ajustar los filtros de búsqueda
+          <p className="text-gray-600">
+            {searchParams.buscar ? 
+              'Intenta con otros términos de búsqueda' : 
+              'Intenta ajustar los filtros de búsqueda'
+            }
           </p>
         </div>
       )
@@ -81,11 +93,20 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
 
     return (
       <div className="space-y-6">
-        {/* Results Header */}
+        {/* Results Header ACTUALIZADO */}
         <div className="flex justify-between items-center">
-          <p className="text-secondary-600">
-            Mostrando {products.length} productos
-          </p>
+          <div>
+            <p className="text-gray-600">
+              {searchParams.buscar ? (
+                <>
+                  Mostrando {products.length} resultados para{' '}
+                  <span className="font-semibold text-ceramic-blue">"{searchParams.buscar}"</span>
+                </>
+              ) : (
+                `Mostrando ${products.length} productos`
+              )}
+            </p>
+          </div>
           
           {/* Sort Dropdown - Mobile */}
           <div className="block md:hidden">
@@ -104,6 +125,7 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
         <ProductPagination 
           currentPage={parseInt(searchParams.pagina || '1')}
           totalProducts={products.length}
+          searchParams={searchParams}
         />
       </div>
     )
@@ -116,10 +138,10 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-secondary-800 mb-2">
+        <h3 className="text-lg font-medium text-dark-gray mb-2">
           Error al cargar productos
         </h3>
-        <p className="text-secondary-600">
+        <p className="text-gray-600">
           Por favor, intenta nuevamente más tarde
         </p>
       </div>
@@ -127,9 +149,10 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
   }
 }
 
+// Componentes auxiliares sin cambios...
 function SortDropdown() {
   return (
-    <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+    <select className="border border-light-gray rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ceramic-blue focus:border-transparent">
       <option value="">Ordenar por</option>
       <option value="precio_asc">Precio: Menor a Mayor</option>
       <option value="precio_desc">Precio: Mayor a Menor</option>
@@ -139,17 +162,37 @@ function SortDropdown() {
   )
 }
 
-function ProductPagination({ currentPage, totalProducts }: { currentPage: number, totalProducts: number }) {
+function ProductPagination({ 
+  currentPage, 
+  totalProducts, 
+  searchParams 
+}: { 
+  currentPage: number
+  totalProducts: number
+  searchParams: SearchParams
+}) {
   const totalPages = Math.ceil(totalProducts / 12)
   
   if (totalPages <= 1) return null
+
+  // Construir URL con parámetros existentes
+  const buildPageUrl = (page: number) => {
+    const params = new URLSearchParams()
+    if (searchParams.buscar) params.set('buscar', searchParams.buscar)
+    if (searchParams.categoria) params.set('categoria', searchParams.categoria)
+    if (searchParams.precio_min) params.set('precio_min', searchParams.precio_min)
+    if (searchParams.precio_max) params.set('precio_max', searchParams.precio_max)
+    if (searchParams.ordenar) params.set('ordenar', searchParams.ordenar)
+    params.set('pagina', page.toString())
+    return `?${params.toString()}`
+  }
 
   return (
     <div className="flex justify-center items-center space-x-2 mt-8">
       {currentPage > 1 && (
         <a
-          href={`?pagina=${currentPage - 1}`}
-          className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          href={buildPageUrl(currentPage - 1)}
+          className="px-3 py-2 border border-light-gray rounded-lg hover:bg-gray-50 transition-colors"
         >
           Anterior
         </a>
@@ -160,11 +203,11 @@ function ProductPagination({ currentPage, totalProducts }: { currentPage: number
         return (
           <a
             key={page}
-            href={`?pagina=${page}`}
+            href={buildPageUrl(page)}
             className={`px-3 py-2 border rounded-lg transition-colors ${
               page === currentPage
-                ? 'bg-primary-500 text-white border-primary-500'
-                : 'border-gray-300 hover:bg-gray-50'
+                ? 'bg-ceramic-blue text-white border-ceramic-blue'
+                : 'border-light-gray hover:bg-gray-50'
             }`}
           >
             {page}
@@ -174,8 +217,8 @@ function ProductPagination({ currentPage, totalProducts }: { currentPage: number
       
       {currentPage < totalPages && (
         <a
-          href={`?pagina=${currentPage + 1}`}
-          className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          href={buildPageUrl(currentPage + 1)}
+          className="px-3 py-2 border border-light-gray rounded-lg hover:bg-gray-50 transition-colors"
         >
           Siguiente
         </a>

@@ -9,40 +9,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Paleta para Centro Cerámico Capital
+        // Tu paleta personalizada exacta
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9', // Azul principal para construcción
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+          50: '#f0f8ff',   // Azul muy claro
+          100: '#e0f2fe',  // Azul claro
+          200: '#bae6fd',  // Azul suave
+          300: '#7dd3fc',  // Azul medio-claro
+          400: '#38bdf8',  // Azul medio
+          500: '#2A6FA1',  // Azul cerámico principal
+          600: '#1e5a8a',  // Azul más oscuro
+          700: '#1e40af',  // Azul profundo
+          800: '#1e3a8a',  // Azul muy oscuro
+          900: '#1e293b',  // Azul casi negro
         },
         secondary: {
-          50: '#fafaf9',
-          100: '#f5f5f4',
-          200: '#e7e5e4',
-          300: '#d6d3d1',
-          400: '#a8a29e',
-          500: '#78716c', // Gris cálido para cerámicas
-          600: '#57534e',
-          700: '#44403c',
-          800: '#292524',
-          900: '#1c1917',
+          50: '#f9fafb',   // Gris muy claro
+          100: '#f3f4f6',  // Gris claro
+          200: '#E5E7EB',  // Gris claro (tu color)
+          300: '#d1d5db',  // Gris medio-claro
+          400: '#9ca3af',  // Gris medio
+          500: '#6b7280',  // Gris
+          600: '#4b5563',   // MEJORADO: Gris medio-oscuro para texto secundario
+          700: '#374151',   // MEJORADO: Gris más oscuro para texto importante
+          800: '#1f2937',   // MEJORADO: Gris muy oscuro para texto principal 
+          900: '#111827',   // MEJORADO: Casi negro para títulos principales
         },
         accent: {
-          50: '#fef7ed',
-          100: '#fedcc2',
-          200: '#fdb885',
-          300: '#fb923c', // Naranja para elementos de acción
-          400: '#f97316',
-          500: '#ea580c',
-          600: '#dc2626',
-        }
+          50: '#fef7ed',   // Terracota muy claro
+          100: '#fef3e2',  // Terracota claro
+          200: '#fde4c4',  // Terracota suave claro
+          300: '#fbd5a6',  // Terracota medio-claro
+          400: '#f9c088',  // Terracota medio
+          500: '#C97E63',  // Terracota suave (tu color)
+          600: '#b86b4f',  // Terracota más oscuro
+          700: '#a7583b',  // Terracota oscuro
+          800: '#964527',  // Terracota muy oscuro
+          900: '#6B4E3D',  // Marrón del logo
+        },
+        // Colores específicos de tu marca
+        'ceramic-blue': '#2A6FA1',
+        'dark-gray': '#333333',
+        'light-gray': '#E5E7EB',
+        'pure-white': '#FFFFFF',
+        'soft-terracotta': '#C97E63',
+        'logo-brown': '#6B4E3D',
+        'text-primary': '#1f2937',      // Gris muy oscuro para texto principal
+        'text-secondary': '#374151',    // Gris oscuro para texto secundario  
+        'text-muted': '#4b5563',        // Gris medio para texto auxiliar
+        'text-light': '#6b7280',       // Gris claro para texto menos importante
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -52,6 +66,8 @@ const config: Config = {
         'fade-in': 'fadeIn 0.3s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'scale-in': 'scaleIn 0.2s ease-out',
+        'bounce-subtle': 'bounceSubtle 0.6s ease-out',
+        'glow': 'glow 2s ease-in-out infinite alternate',
       },
       keyframes: {
         fadeIn: {
@@ -66,7 +82,21 @@ const config: Config = {
           '0%': { transform: 'scale(0.95)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
-      }
+        bounceSubtle: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-4px)' },
+        },
+        glow: {
+          '0%': { boxShadow: '0 0 5px rgba(201, 126, 99, 0.3)' },
+          '100%': { boxShadow: '0 0 20px rgba(201, 126, 99, 0.6)' },
+        },
+      },
+      boxShadow: {
+        'ceramic': '0 4px 6px -1px rgba(42, 111, 161, 0.1), 0 2px 4px -1px rgba(42, 111, 161, 0.06)',
+        'terracotta': '0 4px 6px -1px rgba(201, 126, 99, 0.1), 0 2px 4px -1px rgba(201, 126, 99, 0.06)',
+        'ceramic-lg': '0 10px 15px -3px rgba(42, 111, 161, 0.1), 0 4px 6px -2px rgba(42, 111, 161, 0.05)',
+        'terracotta-lg': '0 10px 15px -3px rgba(201, 126, 99, 0.1), 0 4px 6px -2px rgba(201, 126, 99, 0.05)',
+      },
     },
   },
   plugins: [],

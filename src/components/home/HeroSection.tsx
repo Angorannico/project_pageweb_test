@@ -7,31 +7,34 @@ export function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl lg:text-6xl font-display font-bold text-secondary-800 leading-tight">
-                Cerámicas de
-                <span className="text-primary-500 block">
-                  Construcción
-                </span>
-                Profesional
-              </h1>
-              <p className="text-xl text-secondary-600 leading-relaxed">
-                Más de 15 años especializados en cerámicas de alta calidad para 
-                constructores y remodeladores profesionales.
-              </p>
-            </div>
+          <div className="space-y-4">
+  <h1 className="text-4xl lg:text-6xl font-display font-bold text-text-primary leading-tight">
+    {/* CAMBIADO: text-dark-gray por text-text-primary */}
+    Cerámicas de
+    <span className="text-ceramic-blue block animate-fade-in">
+      Construcción
+    </span>
+    <span className="text-soft-terracotta">Profesional</span>
+  </h1>
+  <p className="text-xl text-text-secondary leading-relaxed font-medium">
+    {/* CAMBIADO: text-secondary-600 por text-text-secondary */}
+    Más de 15 años especializados en cerámicas de alta calidad para 
+    constructores y remodeladores profesionales.
+  </p>
+</div>
+
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="/tienda"
-                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary-500 hover:bg-primary-600 text-white focus:ring-primary-500 rounded-lg"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary-500 hover:bg-primary-600  hover:text-accent-500 focus:ring-primary-500 rounded-lg"
               >
                 Ver Catálogo
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
               <a
                 href="/contacto"
-                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-500 rounded-lg"
+                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-primary-500 text-primary-500 hover:text-soft-terracotta hover:border-soft-terracotta hover:-translate-y-1 hover:shadow-lg focus:ring-primary-500 rounded-lg"
               >
                 Cotizar Proyecto
               </a>

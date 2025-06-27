@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Search, ShoppingCart, User, Menu, X, Phone, Mail } from 'lucide-react'
+import Image from 'next/image'
+import { ShoppingCart, User, Menu, X, Phone, Mail, Search } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
+import { SearchInput } from '../ui/SearchInput' // NUEVO IMPORT
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -13,15 +15,13 @@ export function Header() {
   const navigation = [
     { name: 'Inicio', href: '/' },
     { name: 'Tienda', href: '/tienda' },
-    { name: 'Categorías', href: '/categorias' },
-    { name: 'Ofertas', href: '/ofertas' },
     { name: 'Contacto', href: '/contacto' },
   ]
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-100">
       {/* Top Bar */}
-      <div className="bg-secondary-800 text-white py-2">
+      <div className="bg-secondary-800 primary-900 py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-6">
@@ -44,113 +44,99 @@ export function Header() {
       {/* Main Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Logo */}
+          {/* Logo - sin cambios */}
           <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center">
-              <div className="bg-primary-500 text-white px-3 py-2 rounded-lg font-display font-bold text-xl">
-                3C
-              </div>
-              <div className="ml-3">
-                <div className="font-display font-bold text-xl text-secondary-800">
-                  Centro Cerámico
-                </div>
-                <div className="text-sm text-secondary-500 -mt-1">
-                  Capital
-                </div>
+            <Link href="/" className="flex items-center group">
+              <div className="relative transition-transform duration-300 ease-out group-hover:scale-105">
+                <Image
+                  src="/Logo.png"
+                  alt="3C Centro Cerámico Capital"
+                  width={480}
+                  height={360}
+                  className="h-12 w-auto"
+                  priority
+                />
               </div>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - sin cambios */}
           <nav className="hidden lg:flex space-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-secondary-700 hover:text-primary-500 font-medium transition-colors duration-300"
+                className="relative px-3 py-2 text-dark-gray hover:text-soft-terracotta font-medium transition-all duration-300 ease-out group hover:transform hover:-translate-y-0.5 hover:drop-shadow-md"
               >
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-soft-terracotta transition-all duration-300 ease-out group-hover:w-full"></span>
                 {item.name}
               </Link>
             ))}
           </nav>
 
-          {/* Search Bar - Desktop */}
+          {/* Search Bar - Desktop ACTUALIZADO */}
           <div className="hidden md:flex flex-1 max-w-lg mx-8">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-              <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-            </div>
+            <SearchInput placeholder="Buscar cerámicas, azulejos, porcelanatos..." />
           </div>
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
-            {/* Mobile Search Toggle */}
+            {/* Mobile Search Toggle ACTUALIZADO */}
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="md:hidden p-2 text-secondary-600 hover:text-primary-500 transition-colors"
+              className="md:hidden p-2 text-dark-gray hover:text-soft-terracotta transition-all duration-300 ease-out hover:transform hover:-translate-y-0.5 hover:drop-shadow-md rounded-lg"
             >
-              <Search className="h-6 w-6" />
+              {isSearchOpen ? <X className="h-6 w-6" /> : <Search className="h-6 w-6" />}
             </button>
 
-            {/* User Account */}
+            {/* User Account - sin cambios */}
             <Link
               href="/cuenta"
-              className="p-2 text-secondary-600 hover:text-primary-500 transition-colors"
+              className="p-2 text-dark-gray hover:text-soft-terracotta transition-all duration-300 ease-out hover:transform hover:-translate-y-0.5 hover:drop-shadow-md rounded-lg"
             >
               <User className="h-6 w-6" />
             </Link>
 
-            {/* Cart */}
+            {/* Cart - sin cambios */}
             <Link
               href="/carrito"
-              className="relative p-2 text-secondary-600 hover:text-primary-500 transition-colors"
+              className="relative p-2 text-dark-gray hover:text-soft-terracotta transition-all duration-300 ease-out hover:transform hover:-translate-y-0.5 hover:drop-shadow-md rounded-lg"
             >
               <ShoppingCart className="h-6 w-6" />
               {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-accent-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                <span className="absolute -top-1 -right-1 bg-soft-terracotta text-pure-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium animate-pulse">
                   {itemCount}
                 </span>
               )}
             </Link>
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile Menu Toggle - sin cambios */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 text-secondary-600 hover:text-primary-500 transition-colors"
+              className="lg:hidden p-2 text-dark-gray hover:text-soft-terracotta transition-all duration-300 ease-out hover:transform hover:-translate-y-0.5 hover:drop-shadow-md rounded-lg"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
+        {/* Mobile Search Bar ACTUALIZADO */}
         {isSearchOpen && (
           <div className="md:hidden pb-4 animate-slide-up">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-              <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-            </div>
+            <SearchInput placeholder="Buscar productos..." />
           </div>
         )}
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - sin cambios */}
       {isMenuOpen && (
-        <div className="lg:hidden border-t border-gray-100 bg-white animate-slide-up">
+        <div className="lg:hidden border-t border-light-gray bg-pure-white animate-slide-up">
           <div className="px-4 py-4 space-y-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block px-3 py-2 text-secondary-700 hover:text-primary-500 hover:bg-gray-50 rounded-md transition-colors"
+                className="block px-3 py-2 text-dark-gray hover:text-soft-terracotta hover:bg-gray-50 rounded-md transition-all duration-300 ease-out hover:transform hover:translate-x-1"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
