@@ -1,23 +1,33 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react'
-import { Slot } from '@radix-ui/react-slot'
 import { cn } from '../../lib/utils'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'outline' | 'success' | 'warning'
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
-  asChild?: boolean
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'primary', size = 'md', loading, asChild = false, children, disabled, ...props }, ref) => {
-    const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+  ({ className, variant = 'primary', size = 'md', loading, children, disabled, ...props }, ref) => {
+    // Clases base con transiciones suaves
+    const baseClasses = 'inline-flex items-center justify-center font-semibold transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed border hover:transform hover:-translate-y-0.5 hover:shadow-lg'
     
+    // Variantes con hover azul específico #0B5ED7
     const variants = {
-      primary: 'bg-primary-500 hover:bg-primary-600 text-white focus:ring-primary-500',
-      secondary: 'bg-secondary-500 hover:bg-secondary-600 text-white focus:ring-secondary-500',
-      outline: 'border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-500',
-      ghost: 'text-primary-500 hover:bg-primary-50 focus:ring-primary-500',
+      // ACTUALIZADO: Azul principal con hover específico #0B5ED7
+      primary: 'bg-ceramic-blue hover:bg-[#0B5ED7] text-pure-white border-ceramic-blue hover:border-[#0B5ED7] focus:ring-ceramic-blue shadow-md hover:shadow-ceramic-lg',
+      
+      // ACTUALIZADO: Gris secundario con hover azul
+      secondary: 'bg-secondary-100 hover:bg-[#0B5ED7] text-text-primary hover:text-pure-white border-border-light hover:border-[#0B5ED7] focus:ring-secondary-300 shadow-sm hover:shadow-lg',
+      
+      // ACTUALIZADO: Outline con hover azul específico
+      outline: 'bg-transparent hover:bg-[#0B5ED7] text-ceramic-blue hover:text-pure-white border-ceramic-blue hover:border-[#0B5ED7] focus:ring-ceramic-blue shadow-sm hover:shadow-lg',
+      
+      // Verde éxito mantiene su color
+      success: 'bg-green-600 hover:bg-green-700 text-pure-white border-green-600 hover:border-green-700 focus:ring-green-600 shadow-sm hover:shadow-lg',
+      
+      // ACTUALIZADO: Warning con hover azul
+      warning: 'bg-soft-terracotta hover:bg-[#0B5ED7] text-pure-white border-soft-terracotta hover:border-[#0B5ED7] focus:ring-soft-terracotta shadow-sm hover:shadow-lg',
     }
     
     const sizes = {
@@ -26,13 +36,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       lg: 'px-6 py-3 text-lg rounded-lg',
     }
 
-    const classes = cn(baseClasses, variants[variant], sizes[size], className)
-
-    const Comp = asChild ? Slot : 'button'
-    
     return (
-      <Comp
-        className={classes}
+      <button
+        className={cn(baseClasses, variants[variant], sizes[size], className)}
         disabled={disabled || loading}
         ref={ref}
         {...props}
@@ -44,7 +50,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {children}
-      </Comp>
+      </button>
     )
   }
 )

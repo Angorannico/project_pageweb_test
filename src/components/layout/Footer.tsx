@@ -5,13 +5,13 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-secondary-800 text-white">
+    <footer className="bg-secondary-800 primary-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <div className="bg-primary-500 text-white px-3 py-2 rounded-lg font-display font-bold text-xl">
+              <div className="bg-primary-500 primary-800 px-3 py-2 rounded-lg font-display font-bold text-xl">
                 3C
               </div>
               <div className="ml-3">
@@ -25,13 +25,13 @@ export function Footer() {
               Calidad profesional para constructores y remodeladores.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-secondary-400 hover:text-white transition-colors">
+              <a href="#" className="text-secondary-400 hover:accent-900 transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-secondary-400 hover:text-white transition-colors">
+              <a href="#" className="text-secondary-400 hover:accent-900 transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-secondary-400 hover:text-white transition-colors">
+              <a href="#" className="text-secondary-400 hover:accent-900 transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
             </div>
@@ -44,14 +44,12 @@ export function Footer() {
               {[
                 { name: 'Inicio', href: '/' },
                 { name: 'Tienda', href: '/tienda' },
-                { name: 'Categorías', href: '/categorias' },
-                { name: 'Ofertas', href: '/ofertas' },
                 { name: 'Sobre Nosotros', href: '/nosotros' },
               ].map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-secondary-300 hover:text-white transition-colors text-sm"
+                    className="text-secondary-300 hover:accent-800 transition-colors text-sm"
                   >
                     {link.name}
                   </Link>
