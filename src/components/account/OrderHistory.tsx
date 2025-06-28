@@ -1,6 +1,7 @@
 import { formatPrice, formatDate } from '../../lib/utils'
 import { Package, Eye } from 'lucide-react'
 import { Button } from '../ui/Button'
+import Link from 'next/link'
 
 // Datos de ejemplo - en producción vendrían de tu API
 const mockOrders = [
@@ -54,9 +55,12 @@ export function OrderHistory() {
         <p className="text-secondary-600 mb-6">
           Cuando realices tu primera compra, aparecerá aquí.
         </p>
-        <Button asChild>
-          <a href="/tienda">Explorar Productos</a>
-        </Button>
+        <Link
+          href="/tienda"
+          className="inline-flex items-center justify-center px-4 py-2 text-base font-semibold bg-ceramic-blue hover:bg-[#0B5ED7] text-pure-white rounded-lg transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 border border-ceramic-blue hover:border-[#0B5ED7] focus:ring-ceramic-blue shadow-md hover:shadow-ceramic-lg hover:transform hover:-translate-y-0.5"
+        >
+          Explorar Productos
+        </Link>
       </div>
     )
   }

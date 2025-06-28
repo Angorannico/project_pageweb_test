@@ -21,20 +21,20 @@ export function Header() {
   return (
     <header className="bg-white shadow-sm border-b border-gray-100">
       {/* Top Bar */}
-      <div className="bg-secondary-800 primary-900 py-2">
+      <div className="bg-[#373735] primary-900 py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4" />
-                <span>+57 (1) 234-5678</span>
+              <div className="flex items-center space-x-2 text-pure-white">
+                <Phone className="h-4 w-4 text-pure-white" />
+                <span>+57 304 223-1342</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 text-pure-white">
                 <Mail className="h-4 w-4" />
-                <span>info@centroceramico.com</span>
+                <span>info@angoran.com</span>
               </div>
             </div>
-            <div className="hidden md:block">
+            <div className="hidden md:block text-pure-white">
               <span>Envío gratis en compras superiores a $200.000</span>
             </div>
           </div>
@@ -53,7 +53,7 @@ export function Header() {
                   alt="3C Centro Cerámico Capital"
                   width={480}
                   height={360}
-                  className="h-12 w-auto"
+                  className="h-28 w-auto"
                   priority
                 />
               </div>

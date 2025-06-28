@@ -30,12 +30,12 @@ export default function CarritoPage() {
             <p className="text-secondary-600 mb-8">
               Agrega algunos productos para comenzar tu compra
             </p>
-            <Button asChild>
-              <Link href="/tienda">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Continuar Comprando
-              </Link>
-            </Button>
+            <Link
+              href="/tienda"
+              className="inline-flex items-center justify-center px-6 py-3 text-lg font-semibold bg-ceramic-blue hover:bg-hover-blue text-pure-white rounded-lg transition-all duration-300"
+            >
+              Ir a la Tienda
+            </Link>
           </div>
         </div>
       </div>

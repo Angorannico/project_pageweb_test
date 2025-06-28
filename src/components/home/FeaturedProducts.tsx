@@ -3,73 +3,94 @@ import { ProductCard } from '../product/ProductCard'
 import { Product } from '../../lib/types'
 import { ArrowRight } from 'lucide-react'
 
-// Datos mock para fallback
-const mockProducts: Product[] = [
-  {
-    id: 1,
-    name: 'Azulejo Cerámico Blanco 30x30',
-    slug: 'azulejo-ceramico-blanco-30x30',
-    permalink: '',
-    description: 'Azulejo cerámico de alta calidad',
-    short_description: 'Perfecto para baños y cocinas',
-    sku: 'AZ-001',
-    price: '25000',
-    regular_price: '25000',
-    sale_price: '',
-    on_sale: false,
-    stock_status: 'instock',
-    stock_quantity: 100,
-    images: [
-      {
-        id: 1,
-        src: '/placeholder-product.jpg',
-        name: 'Azulejo Blanco',
-        alt: 'Azulejo Cerámico Blanco'
-      }
-    ],
-    categories: [
-      { id: 1, name: 'Azulejos', slug: 'azulejos' }
-    ],
-    attributes: [],
-    variations: [],
-    meta_data: []
-  }
-];
-
 export async function FeaturedProducts() {
   try {
-    const products = await wooCommerce.getProducts({ 
-      featured: 'true', 
-      per_page: '8' 
-    }) as Product[]
+    // PASO 1: Obtener todas las etiquetas para encontrar el ID de "Destacado"
+    const tags = await wooCommerce.getProductTags() as any[]
+    
+    // PASO 2: Buscar la etiqueta "Destacado"
+    const destacadoTag = tags.find(tag => 
+      tag.name.toLowerCase().includes('destacado') || 
+      tag.slug.includes('destacado')
+    )
 
-    const productsToShow = products && products.length > 0 ? products : mockProducts;
-
-    return (
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-display font-bold text-secondary-800 mb-4">
+    if (!destacadoTag) {
+      console.log('No se encontró la etiqueta "Destacado"')
+      return (
+        <section className="py-16 bg-pure-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
               Productos Destacados
             </h2>
-            <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
+            <p className="text-text-secondary">
+              No hay productos destacados disponibles. 
+              <br />
+              <small className="text-text-muted">
+                Asegúrate de tener productos con la etiqueta "Destacado" en WooCommerce.
+              </small>
+            </p>
+          </div>
+        </section>
+      )
+    }
+
+    // PASO 3: Obtener productos con la etiqueta "Destacado" usando el ID
+    const products = await wooCommerce.getProducts({ 
+      tag: destacadoTag.id.toString(),  // CORREGIDO: Usar el ID de la etiqueta
+      per_page: '8',
+      status: 'publish',
+      stock_status: 'instock'  // Solo productos en stock
+    }) as Product[]
+
+    if (!products || products.length === 0) {
+      return (
+        <section className="py-16 bg-pure-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
+              Productos Destacados
+            </h2>
+            <p className="text-text-secondary">
+              No hay productos con la etiqueta "Destacado" disponibles.
+              <br />
+              <small className="text-text-muted">
+                Etiqueta encontrada: "{destacadoTag.name}" (ID: {destacadoTag.id})
+              </small>
+            </p>
+          </div>
+        </section>
+      )
+    }
+
+    return (
+      <section className="py-16 bg-pure-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
+              Productos Destacados
+            </h2>
+            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
               Descubre nuestra selección de cerámicas más populares entre profesionales
             </p>
+            {/* AGREGADO: Indicador de la etiqueta encontrada para debugging */}
+            <small className="text-text-muted block mt-2">
+              Mostrando {products.length} productos con etiqueta "{destacadoTag.name}"
+            </small>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {productsToShow.slice(0, 8).map((product) => (
+            {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
+          {/* Botón Ver Todos los Productos */}
           <div className="text-center mt-12">
             <a
               href="/tienda"
-              className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-500 rounded-lg"
+              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold bg-soft-terracotta hover:bg-accent-600 text-pure-white rounded-lg transition-all duration-300 ease-out hover:transform hover:-translate-y-1 hover:shadow-terracotta-lg border border-soft-terracotta hover:border-accent-600 group"
             >
               Ver Todos los Productos
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
             </a>
           </div>
         </div>
@@ -79,15 +100,20 @@ export async function FeaturedProducts() {
     console.error('Error fetching featured products:', error)
     
     return (
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-pure-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-display font-bold text-secondary-800 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
             Productos Destacados
           </h2>
-          <p className="text-secondary-600">Error al cargar productos destacados</p>
+          <p className="text-text-secondary">
+            Error al cargar productos destacados. 
+            <br />
+            <small className="text-text-muted">
+              Verifica la conexión con WooCommerce: {error instanceof Error ? error.message : 'Error desconocido'}
+            </small>
+          </p>
         </div>
       </section>
     )
   }
 }
-

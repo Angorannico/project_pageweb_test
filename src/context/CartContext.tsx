@@ -1,7 +1,7 @@
 'use client'
 
-import { createContext, useContext, useReducer, ReactNode } from 'react'
-import { Product, CartItem } from '../lib/types' // Removido Cart import
+import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react'
+import { Product, CartItem } from '../lib/types'
 
 interface CartState {
   items: CartItem[]
@@ -17,6 +17,7 @@ type CartAction =
   | { type: 'REMOVE_ITEM'; payload: { id: number } }
   | { type: 'UPDATE_QUANTITY'; payload: { id: number; quantity: number } }
   | { type: 'CLEAR_CART' }
+  | { type: 'LOAD_CART'; payload: CartState } // AGREGADO
 
 interface CartContextType extends CartState {
   addItem: (product: Product, quantity: number) => void
@@ -65,14 +66,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
     
     case 'CLEAR_CART': {
-      return {
-        items: [],
-        total: 0,
-        subtotal: 0,
-        tax: 0,
-        shipping: 0,
-        itemCount: 0,
-      }
+      return initialState
+    }
+
+    // AGREGADO: Cargar carrito desde localStorage
+    case 'LOAD_CART': {
+      return action.payload
     }
     
     default:
@@ -112,6 +111,24 @@ const initialState: CartState = {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState)
+  
+  // AGREGADO: Cargar carrito desde localStorage al inicializar
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart')
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart)
+        dispatch({ type: 'LOAD_CART', payload: parsedCart })
+      } catch (error) {
+        console.error('Error loading cart from localStorage:', error)
+      }
+    }
+  }, [])
+
+  // AGREGADO: Guardar carrito en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(state))
+  }, [state])
   
   const addItem = (product: Product, quantity: number) => {
     dispatch({ type: 'ADD_ITEM', payload: { product, quantity } })
