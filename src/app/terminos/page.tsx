@@ -375,7 +375,7 @@ export default function TerminosPage() {
             Tabla de Contenidos
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {sections.map((section, index) => (
+            {sections.map((section) => (
               <a
                 key={section.id}
                 href={`#${section.id}`}
@@ -392,7 +392,7 @@ export default function TerminosPage() {
 
         {/* Contenido Principal */}
         <div className="space-y-8">
-          {sections.map((section, index) => (
+          {sections.map((section) => (
             <div
               key={section.id}
               id={section.id}
@@ -462,16 +462,16 @@ export default function TerminosPage() {
                 La empresa no se hace responsable por:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {[
-                  'Fallos técnicos del sitio web',
-                  'Errores de inventario',
-                  'Demoras atribuibles a terceros',
-                  'Situaciones de fuerza mayor'
+              {[
+                'Fallos técnicos del sitio web',
+                'Errores de inventario',
+                'Demoras atribuibles a terceros',
+                'Situaciones de fuerza mayor'
                 ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-2 p-3 bg-yellow-50 rounded-lg">
+                <div key={index} className="flex items-center space-x-2 p-3 bg-yellow-50 rounded-lg">
                     <AlertTriangle className="h-4 w-4 text-yellow-600" />
                     <span className="text-yellow-800 text-sm">{item}</span>
-                  </div>
+                </div>
                 ))}
               </div>
             </div>

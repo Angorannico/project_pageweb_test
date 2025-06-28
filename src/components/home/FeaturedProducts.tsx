@@ -1,14 +1,13 @@
 import { wooCommerce } from '../../lib/api/woocommerce'
 import { ProductCard } from '../product/ProductCard'
-import { Product } from '../../lib/types'
+import { Product, ProductTag } from '../../lib/types' // AGREGADO: ProductTag
 import { ArrowRight } from 'lucide-react'
 
 export async function FeaturedProducts() {
   try {
-    // PASO 1: Obtener todas las etiquetas para encontrar el ID de "Destacado"
-    const tags = await wooCommerce.getProductTags() as any[]
+    // CORREGIDO: Tipado específico en lugar de any
+    const tags = await wooCommerce.getProductTags() as ProductTag[]
     
-    // PASO 2: Buscar la etiqueta "Destacado"
     const destacadoTag = tags.find(tag => 
       tag.name.toLowerCase().includes('destacado') || 
       tag.slug.includes('destacado')
@@ -26,7 +25,7 @@ export async function FeaturedProducts() {
               No hay productos destacados disponibles. 
               <br />
               <small className="text-text-muted">
-                Asegúrate de tener productos con la etiqueta "Destacado" en WooCommerce.
+                Asegúrate de tener productos con la etiqueta &quot;Destacado&quot; en WooCommerce.
               </small>
             </p>
           </div>
@@ -34,12 +33,11 @@ export async function FeaturedProducts() {
       )
     }
 
-    // PASO 3: Obtener productos con la etiqueta "Destacado" usando el ID
     const products = await wooCommerce.getProducts({ 
-      tag: destacadoTag.id.toString(),  // CORREGIDO: Usar el ID de la etiqueta
+      tag: destacadoTag.id.toString(),
       per_page: '8',
       status: 'publish',
-      stock_status: 'instock'  // Solo productos en stock
+      stock_status: 'instock'
     }) as Product[]
 
     if (!products || products.length === 0) {
@@ -50,10 +48,10 @@ export async function FeaturedProducts() {
               Productos Destacados
             </h2>
             <p className="text-text-secondary">
-              No hay productos con la etiqueta "Destacado" disponibles.
+              No hay productos con la etiqueta &quot;Destacado&quot; disponibles.
               <br />
               <small className="text-text-muted">
-                Etiqueta encontrada: "{destacadoTag.name}" (ID: {destacadoTag.id})
+                Etiqueta encontrada: &quot;{destacadoTag.name}&quot; (ID: {destacadoTag.id})
               </small>
             </p>
           </div>
@@ -71,9 +69,8 @@ export async function FeaturedProducts() {
             <p className="text-lg text-text-secondary max-w-2xl mx-auto">
               Descubre nuestra selección de cerámicas más populares entre profesionales
             </p>
-            {/* AGREGADO: Indicador de la etiqueta encontrada para debugging */}
             <small className="text-text-muted block mt-2">
-              Mostrando {products.length} productos con etiqueta "{destacadoTag.name}"
+              Mostrando {products.length} productos con etiqueta &quot;{destacadoTag.name}&quot;
             </small>
           </div>
 
@@ -83,7 +80,6 @@ export async function FeaturedProducts() {
             ))}
           </div>
 
-          {/* Botón Ver Todos los Productos */}
           <div className="text-center mt-12">
             <a
               href="/tienda"

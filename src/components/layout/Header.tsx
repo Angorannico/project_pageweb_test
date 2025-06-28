@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ShoppingCart, User, Menu, X, Phone, Mail, Search } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
-import { SearchInput } from '../ui/SearchInput' // NUEVO IMPORT
+import { SearchInput } from '../ui/SearchInput'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -76,7 +76,9 @@ export function Header() {
 
           {/* Search Bar - Desktop ACTUALIZADO */}
           <div className="hidden md:flex flex-1 max-w-lg mx-8">
-            <SearchInput placeholder="Buscar cerámicas, azulejos, porcelanatos..." />
+            <Suspense fallback={<div className="w-full h-10 bg-gray-200 rounded-lg animate-pulse" />}>
+              <SearchInput placeholder="Buscar cerámicas, azulejos, porcelanatos..." />
+            </Suspense>
           </div>
 
           {/* Actions */}
@@ -123,7 +125,9 @@ export function Header() {
         {/* Mobile Search Bar ACTUALIZADO */}
         {isSearchOpen && (
           <div className="md:hidden pb-4 animate-slide-up">
-            <SearchInput placeholder="Buscar productos..." />
+            <Suspense fallback={<div className="w-full h-10 bg-gray-200 rounded-lg animate-pulse" />}>
+              <SearchInput placeholder="Buscar productos..." />
+            </Suspense>
           </div>
         )}
       </div>
