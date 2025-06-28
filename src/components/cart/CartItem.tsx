@@ -73,10 +73,10 @@ export function CartItem({ item }: CartItemProps) {
 
             {/* Remove Button */}
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => removeItem(item.id)}
-              className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              className="text-red-500 border-red-500 hover:text-red-700 hover:bg-red-50"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
