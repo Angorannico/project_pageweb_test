@@ -102,11 +102,11 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary-400 flex-shrink-0" />
-                <span className="text-secondary-300 text-sm">+57 (1) 234-5678</span>
+                <span className="text-secondary-300 text-sm">+57 304 223-342</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-400 flex-shrink-0" />
-                <span className="text-secondary-300 text-sm">info@centroceramico.com</span>
+                <span className="text-secondary-300 text-sm">info@angoran.com</span>
               </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ export function Footer() {
         <div className="border-t border-secondary-700 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-secondary-400 text-sm">
-              © {currentYear} Centro Cerámico Capital. Todos los derechos reservados.
+              © {currentYear} Centro Cerámico Capital. Todos los derechos reservados de ARANGROUP. By angoran
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="/privacidad" className="text-secondary-400 hover:text-white text-sm transition-colors">

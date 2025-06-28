@@ -70,3 +70,35 @@ export interface Cart {
   tax: number;
   shipping: number;
 } 
+
+// AGREGADO: Interfaz para tags de productos
+export interface ProductTag {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  count?: number;
+}
+
+// ACTUALIZAR: Interfaz Product para incluir tags
+export interface Product {
+  id: number;
+  name: string;
+  slug: string;
+  permalink: string;
+  description: string;
+  short_description: string;
+  sku: string;
+  price: string;
+  regular_price: string;
+  sale_price: string;
+  on_sale: boolean;
+  stock_status: 'instock' | 'outofstock' | 'onbackorder';
+  stock_quantity: number | null;
+  images: ProductImage[];
+  categories: ProductCategory[];
+  attributes: ProductAttribute[];
+  variations: number[];
+  meta_data: MetaData[];
+  tags?: ProductTag[];  // AGREGADO: Tags del producto
+}

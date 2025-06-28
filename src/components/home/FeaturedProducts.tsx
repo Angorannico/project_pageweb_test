@@ -3,76 +3,63 @@ import { ProductCard } from '../product/ProductCard'
 import { Product } from '../../lib/types'
 import { ArrowRight } from 'lucide-react'
 
-// Datos mock para fallback
-const mockProducts: Product[] = [
-  {
-    id: 1,
-    name: 'Azulejo Cerámico Blanco 30x30',
-    slug: 'azulejo-ceramico-blanco-30x30',
-    permalink: '',
-    description: 'Azulejo cerámico de alta calidad',
-    short_description: 'Perfecto para baños y cocinas',
-    sku: 'AZ-001',
-    price: '25000',
-    regular_price: '25000',
-    sale_price: '',
-    on_sale: false,
-    stock_status: 'instock',
-    stock_quantity: 100,
-    images: [
-      {
-        id: 1,
-        src: '/placeholder-product.jpg',
-        name: 'Azulejo Blanco',
-        alt: 'Azulejo Cerámico Blanco'
-      }
-    ],
-    categories: [
-      { id: 1, name: 'Azulejos', slug: 'azulejos' }
-    ],
-    attributes: [],
-    variations: [],
-    meta_data: []
-  },
-  {
-    id: 2,
-    name: 'Porcelanato Gris 60x60',
-    slug: 'porcelanato-gris-60x60',
-    permalink: '',
-    description: 'Porcelanato de alta resistencia',
-    short_description: 'Ideal para espacios comerciales',
-    sku: 'PG-002',
-    price: '45000',
-    regular_price: '50000',
-    sale_price: '45000',
-    on_sale: true,
-    stock_status: 'instock',
-    stock_quantity: 50,
-    images: [
-      {
-        id: 2,
-        src: '/placeholder-product.jpg',
-        name: 'Porcelanato Gris',
-        alt: 'Porcelanato Gris'
-      }
-    ],
-    categories: [
-      { id: 2, name: 'Porcelanatos', slug: 'porcelanatos' }
-    ],
-    attributes: [],
-    variations: [],
-    meta_data: []
-  }
-];
-
 export async function FeaturedProducts() {
   try {
+    // PASO 1: Obtener todas las etiquetas para encontrar el ID de "Destacado"
+    const tags = await wooCommerce.getProductTags() as any[]
+    
+    // PASO 2: Buscar la etiqueta "Destacado"
+    const destacadoTag = tags.find(tag => 
+      tag.name.toLowerCase().includes('destacado') || 
+      tag.slug.includes('destacado')
+    )
+
+    if (!destacadoTag) {
+      console.log('No se encontró la etiqueta "Destacado"')
+      return (
+        <section className="py-16 bg-pure-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
+              Productos Destacados
+            </h2>
+            <p className="text-text-secondary">
+              No hay productos destacados disponibles. 
+              <br />
+              <small className="text-text-muted">
+                Asegúrate de tener productos con la etiqueta "Destacado" en WooCommerce.
+              </small>
+            </p>
+          </div>
+        </section>
+      )
+    }
+
+    // PASO 3: Obtener productos con la etiqueta "Destacado" usando el ID
     const products = await wooCommerce.getProducts({ 
-      featured: 'true', 
-      per_page: '8' 
+      tag: destacadoTag.id.toString(),  // CORREGIDO: Usar el ID de la etiqueta
+      per_page: '8',
+      status: 'publish',
+      stock_status: 'instock'  // Solo productos en stock
     }) as Product[]
 
-    const productsToShow = products && products.length > 0 ? products : mockProducts;
+    if (!products || products.length === 0) {
+      return (
+        <section className="py-16 bg-pure-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
+              Productos Destacados
+            </h2>
+            <p className="text-text-secondary">
+              No hay productos con la etiqueta "Destacado" disponibles.
+              <br />
+              <small className="text-text-muted">
+                Etiqueta encontrada: "{destacadoTag.name}" (ID: {destacadoTag.id})
+              </small>
+            </p>
+          </div>
+        </section>
+      )
+    }
 
     return (
       <section className="py-16 bg-pure-white">
@@ -84,15 +71,19 @@ export async function FeaturedProducts() {
             <p className="text-lg text-text-secondary max-w-2xl mx-auto">
               Descubre nuestra selección de cerámicas más populares entre profesionales
             </p>
+            {/* AGREGADO: Indicador de la etiqueta encontrada para debugging */}
+            <small className="text-text-muted block mt-2">
+              Mostrando {products.length} productos con etiqueta "{destacadoTag.name}"
+            </small>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {productsToShow.slice(0, 8).map((product) => (
+            {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
-          {/* CORREGIDO: Botón con mismos colores que "Cotizar Proyecto" */}
+          {/* Botón Ver Todos los Productos */}
           <div className="text-center mt-12">
             <a
               href="/tienda"
@@ -114,7 +105,13 @@ export async function FeaturedProducts() {
           <h2 className="text-3xl lg:text-4xl font-display font-bold text-text-primary mb-4">
             Productos Destacados
           </h2>
-          <p className="text-text-secondary">Error al cargar productos destacados</p>
+          <p className="text-text-secondary">
+            Error al cargar productos destacados. 
+            <br />
+            <small className="text-text-muted">
+              Verifica la conexión con WooCommerce: {error instanceof Error ? error.message : 'Error desconocido'}
+            </small>
+          </p>
         </div>
       </section>
     )

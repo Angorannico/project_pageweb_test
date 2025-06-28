@@ -6,36 +6,38 @@ interface SearchParams {
   precio_min?: string
   precio_max?: string
   ordenar?: string
+  buscar?: string
 }
 
 interface ProductFiltersProps {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 export async function ProductFilters({ searchParams }: ProductFiltersProps) {
   try {
+    const resolvedSearchParams = await searchParams
     const categories = await wooCommerce.getCategories() as ProductCategory[]
 
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-8">
-        <h2 className="text-lg font-display font-bold text-secondary-800 mb-6">
+      <div className="bg-pure-white rounded-lg border border-border-light p-6 sticky top-8">
+        <h2 className="text-lg font-display font-bold text-text-primary mb-6">
           Filtros
         </h2>
 
-        <div className="space-y-6">
+        <form method="GET" action="/tienda" className="space-y-6">
           {/* Categories Filter */}
           <div>
-            <h3 className="font-semibold text-secondary-700 mb-3">Categorías</h3>
+            <h3 className="font-semibold text-text-secondary mb-3">Categorías</h3>
             <div className="space-y-2">
               <label className="flex items-center">
                 <input
                   type="radio"
                   name="categoria"
                   value=""
-                  defaultChecked={!searchParams.categoria}
-                  className="text-primary-500 focus:ring-primary-500"
+                  defaultChecked={!resolvedSearchParams.categoria}
+                  className="text-ceramic-blue focus:ring-ceramic-blue"
                 />
-                <span className="ml-2 text-sm text-secondary-600">Todas</span>
+                <span className="ml-2 text-sm text-text-muted">Todas</span>
               </label>
               {categories.map((category) => (
                 <label key={category.id} className="flex items-center">
@@ -43,10 +45,10 @@ export async function ProductFilters({ searchParams }: ProductFiltersProps) {
                     type="radio"
                     name="categoria"
                     value={category.id.toString()}
-                    defaultChecked={searchParams.categoria === category.id.toString()}
-                    className="text-primary-500 focus:ring-primary-500"
+                    defaultChecked={resolvedSearchParams.categoria === category.id.toString()}
+                    className="text-ceramic-blue focus:ring-ceramic-blue"
                   />
-                  <span className="ml-2 text-sm text-secondary-600">
+                  <span className="ml-2 text-sm text-text-muted">
                     {category.name}
                   </span>
                 </label>
@@ -56,30 +58,30 @@ export async function ProductFilters({ searchParams }: ProductFiltersProps) {
 
           {/* Price Filter */}
           <div>
-            <h3 className="font-semibold text-secondary-700 mb-3">Precio</h3>
+            <h3 className="font-semibold text-text-secondary mb-3">Precio</h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm text-secondary-600 mb-1">
+                <label className="block text-sm text-text-muted mb-1">
                   Precio mínimo
                 </label>
                 <input
                   type="number"
                   name="precio_min"
-                  defaultValue={searchParams.precio_min}
+                  defaultValue={resolvedSearchParams.precio_min}
                   placeholder="0"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full border border-border-light rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ceramic-blue focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm text-secondary-600 mb-1">
+                <label className="block text-sm text-text-muted mb-1">
                   Precio máximo
                 </label>
                 <input
                   type="number"
                   name="precio_max"
-                  defaultValue={searchParams.precio_max}
+                  defaultValue={resolvedSearchParams.precio_max}
                   placeholder="1000000"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full border border-border-light rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ceramic-blue focus:border-transparent"
                 />
               </div>
             </div>
@@ -87,11 +89,11 @@ export async function ProductFilters({ searchParams }: ProductFiltersProps) {
 
           {/* Sort Filter */}
           <div>
-            <h3 className="font-semibold text-secondary-700 mb-3">Ordenar por</h3>
+            <h3 className="font-semibold text-text-secondary mb-3">Ordenar por</h3>
             <select
               name="ordenar"
-              defaultValue={searchParams.ordenar}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              defaultValue={resolvedSearchParams.ordenar}
+              className="w-full border border-border-light rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ceramic-blue focus:border-transparent"
             >
               <option value="">Relevancia</option>
               <option value="precio_asc">Precio: Menor a Mayor</option>
@@ -101,29 +103,34 @@ export async function ProductFilters({ searchParams }: ProductFiltersProps) {
             </select>
           </div>
 
+          {/* RESTAURADO: Mantener búsqueda actual */}
+          {resolvedSearchParams.buscar && (
+            <input type="hidden" name="buscar" value={resolvedSearchParams.buscar} />
+          )}
+
           {/* Apply Filters Button */}
           <button
             type="submit"
-            className="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+            className="w-full bg-ceramic-blue hover:bg-hover-blue text-pure-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-out hover:transform hover:-translate-y-0.5 hover:shadow-lg"
           >
             Aplicar Filtros
           </button>
 
-          {/* Clear Filters */}
+          {/* RESTAURADO: Clear Filters Button */}
           <a
             href="/tienda"
-            className="block text-center text-sm text-secondary-500 hover:text-primary-500 transition-colors"
+            className="block text-center text-sm text-text-muted hover:text-ceramic-blue transition-colors duration-300 py-2 px-4 border border-border-light rounded-lg hover:bg-secondary-50"
           >
             Limpiar filtros
           </a>
-        </div>
+        </form>
       </div>
     )
   } catch (error) {
     console.error('Error fetching categories:', error)
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <p className="text-secondary-600 text-sm">Error al cargar filtros</p>
+      <div className="bg-pure-white rounded-lg border border-border-light p-6">
+        <p className="text-text-muted text-sm">Error al cargar filtros</p>
       </div>
     )
   }
