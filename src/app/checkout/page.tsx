@@ -5,13 +5,12 @@ import { useCart } from '../../context/CartContext'
 import { CheckoutForm } from '../../components/checkout/CheckoutForm'
 import { OrderSummary } from '../../components/checkout/OrderSummary'
 import { Breadcrumb } from '../../components/ui/Breadcrumb'
-import { redirect } from 'next/navigation'
+// REMOVIDO: redirect, total
 
 export default function CheckoutPage() {
-  const { items, itemCount, total } = useCart()
+  const { items, itemCount } = useCart()
   const [isProcessing, setIsProcessing] = useState(false)
 
-  // AGREGADO: Verificar si el carrito está vacío
   if (itemCount === 0) {
     return (
       <div className="min-h-screen bg-secondary-50">
@@ -65,7 +64,6 @@ export default function CheckoutPage() {
           </h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Checkout Form */}
             <div className="lg:col-span-2">
               <CheckoutForm 
                 isProcessing={isProcessing} 
@@ -73,7 +71,6 @@ export default function CheckoutPage() {
               />
             </div>
 
-            {/* Order Summary */}
             <div className="lg:col-span-1">
               <OrderSummary items={items} />
             </div>

@@ -75,9 +75,9 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-dark-gray mb-2">
+          <h3 className="text-lg font-medium text-secondary-800 mb-2">
             {searchParams.buscar ? 
-              `No se encontraron productos para "${searchParams.buscar}"` : 
+              <>No se encontraron productos para &quot;{searchParams.buscar}&quot;</> : 
               'No se encontraron productos'
             }
           </h3>
@@ -100,7 +100,7 @@ export async function ProductGrid({ searchParams }: ProductGridProps) {
               {searchParams.buscar ? (
                 <>
                   Mostrando {products.length} resultados para{' '}
-                  <span className="font-semibold text-ceramic-blue">"{searchParams.buscar}"</span>
+                  <span className="font-semibold text-ceramic-blue">&quot;{searchParams.buscar}&quot;</span>
                 </>
               ) : (
                 `Mostrando ${products.length} productos`

@@ -213,18 +213,18 @@ export default function PrivacidadPage() {
             </a>:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              { right: 'Acceso', desc: 'Conocer qué datos tenemos sobre ti' },
-              { right: 'Rectificación', desc: 'Corregir datos inexactos' },
-              { right: 'Cancelación', desc: 'Eliminar tus datos personales' },
-              { right: 'Oposición', desc: 'Oponerte al tratamiento' },
-              { right: 'Portabilidad', desc: 'Obtener una copia de tus datos' },
-              { right: 'Olvido', desc: 'Ser olvidado en nuestros sistemas' }
+          {[
+            { right: 'Acceso', desc: 'Conocer qué datos tenemos sobre ti' },
+            { right: 'Rectificación', desc: 'Corregir datos inexactos' },
+            { right: 'Cancelación', desc: 'Eliminar tus datos personales' },
+            { right: 'Oposición', desc: 'Oponerte al tratamiento' },
+            { right: 'Portabilidad', desc: 'Obtener una copia de tus datos' },
+            { right: 'Olvido', desc: 'Ser olvidado en nuestros sistemas' }
             ].map((item, index) => (
-              <div key={index} className="border border-border-light rounded-lg p-4 hover:border-ceramic-blue transition-colors">
+            <div key={index} className="border border-border-light rounded-lg p-4 hover:border-ceramic-blue transition-colors">
                 <h4 className="font-semibold text-text-primary mb-1">{item.right}</h4>
                 <p className="text-sm text-text-muted">{item.desc}</p>
-              </div>
+            </div>
             ))}
           </div>
         </div>
@@ -267,7 +267,7 @@ export default function PrivacidadPage() {
             Tabla de Contenidos
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {sections.map((section, index) => (
+            {sections.map((section) => (
               <a
                 key={section.id}
                 href={`#${section.id}`}
@@ -284,7 +284,7 @@ export default function PrivacidadPage() {
 
         {/* Contenido Principal */}
         <div className="space-y-8">
-          {sections.map((section, index) => (
+          {sections.map((section) => (
             <div
               key={section.id}
               id={section.id}
@@ -316,15 +316,15 @@ export default function PrivacidadPage() {
               <p className="text-text-secondary">Implementamos las siguientes medidas de seguridad:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  { title: 'Encriptación de datos sensibles', icon: '🔐' },
-                  { title: 'Acceso restringido', icon: '🚪' },
-                  { title: 'Monitoreo regular de la infraestructura', icon: '📊' },
-                  { title: 'Uso de pasarelas de pago certificadas', icon: '💳' }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-lg">
+                { title: 'Encriptación de datos sensibles', icon: '🔐' },
+                { title: 'Acceso restringido', icon: '🚪' },
+                { title: 'Monitoreo regular de la infraestructura', icon: '📊' },
+                { title: 'Uso de pasarelas de pago certificadas', icon: '💳' }
+                ].map((item, index) => (  // ← Ahora SÍ usamos el index como key
+                <div key={index} className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-lg">
                     <span className="text-2xl">{item.icon}</span>
                     <span className="text-text-secondary">{item.title}</span>
-                  </div>
+                </div>
                 ))}
               </div>
             </div>

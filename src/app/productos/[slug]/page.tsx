@@ -9,7 +9,7 @@ import { Breadcrumb } from '../../../components/ui/Breadcrumb'
 import { Product } from '../../../lib/types'
 
 interface ProductPageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 async function getProduct(slug: string): Promise<Product | null> {
@@ -23,7 +23,8 @@ async function getProduct(slug: string): Promise<Product | null> {
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProduct(params.slug)
+  const resolvedParams = await params
+  const product = await getProduct(resolvedParams.slug)
 
   if (!product) {
     notFound()
@@ -69,7 +70,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 }
 
 export async function generateMetadata({ params }: ProductPageProps) {
-  const product = await getProduct(params.slug)
+  const resolvedParams = await params
+  const product = await getProduct(resolvedParams.slug)
   
   if (!product) {
     return {
