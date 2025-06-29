@@ -13,13 +13,10 @@ interface SearchParams {
 }
 
 interface TiendaPageProps {
-  searchParams: Promise<SearchParams>  // CAMBIADO: Ahora es Promise según Next.js 15
+  searchParams: SearchParams  // En Next.js 14 NO es Promise
 }
 
-export default async function TiendaPage({ searchParams }: TiendaPageProps) {
-  // AGREGADO: Await searchParams según Next.js 15
-  const resolvedSearchParams = await searchParams
-
+export default function TiendaPage({ searchParams }: TiendaPageProps) {
   return (
     <div className="min-h-screen bg-secondary-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -41,21 +38,35 @@ export default async function TiendaPage({ searchParams }: TiendaPageProps) {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Filters Sidebar */}
             <div className="lg:col-span-1">
-              <Suspense fallback={<div className="h-96 animate-pulse bg-pure-white rounded-lg" />}>
-                <ProductFilters searchParams={searchParams} />  {/* PASANDO Promise directamente */}
+              <Suspense fallback={<FiltersSkeleton />}>
+                <ProductFilters searchParams={Promise.resolve(searchParams)} />
               </Suspense>
             </div>
 
-            {/* Products Grid */}
             <div className="lg:col-span-3">
               <Suspense fallback={<ProductGridSkeleton />}>
-                <ProductGrid searchParams={resolvedSearchParams} />  {/* PASANDO searchParams resueltos */}
+                <ProductGrid searchParams={searchParams} />
               </Suspense>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function FiltersSkeleton() {
+  return (
+    <div className="bg-pure-white rounded-lg border border-border-light p-6">
+      <div className="animate-pulse space-y-4">
+        <div className="h-6 bg-secondary-200 rounded w-1/2"></div>
+        <div className="space-y-2">
+          <div className="h-4 bg-secondary-200 rounded"></div>
+          <div className="h-4 bg-secondary-200 rounded"></div>
+          <div className="h-4 bg-secondary-200 rounded"></div>
+        </div>
+        <div className="h-10 bg-secondary-200 rounded"></div>
       </div>
     </div>
   )
@@ -66,10 +77,10 @@ function ProductGridSkeleton() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: 9 }).map((_, i) => (
         <div key={i} className="bg-pure-white rounded-lg p-4 animate-pulse">
-          <div className="aspect-square bg-gray-200 rounded-lg mb-4" />
-          <div className="h-4 bg-gray-200 rounded mb-2" />
-          <div className="h-4 bg-gray-200 rounded w-2/3 mb-4" />
-          <div className="h-8 bg-gray-200 rounded" />
+          <div className="aspect-square bg-secondary-200 rounded-lg mb-4" />
+          <div className="h-4 bg-secondary-200 rounded mb-2" />
+          <div className="h-4 bg-secondary-200 rounded w-2/3 mb-4" />
+          <div className="h-8 bg-secondary-200 rounded" />
         </div>
       ))}
     </div>

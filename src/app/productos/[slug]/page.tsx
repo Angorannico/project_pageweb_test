@@ -1,94 +1,122 @@
 import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
 import { wooCommerce } from '../../../lib/api/woocommerce'
-import { ProductGallery } from '../../../components/product/ProductGallery'
-import { ProductInfo } from '../../../components/product/ProductInfo'
-import { ProductTabs } from '../../../components/product/ProductTabs'
+import { Product } from '../../../lib/types'
+import { ProductDetail } from '../../../components/product/ProductDetail'
 import { RelatedProducts } from '../../../components/product/RelatedProducts'
 import { Breadcrumb } from '../../../components/ui/Breadcrumb'
-import { Product } from '../../../lib/types'
 
-interface ProductPageProps {
-  params: Promise<{ slug: string }>
+// Función requerida para export estático en Next.js 14
+export async function generateStaticParams() {
+  try {
+    const products = await wooCommerce.getProducts({ 
+      per_page: '50',
+      status: 'publish'
+    }) as Product[]
+
+    return products.map((product) => ({
+      slug: product.slug,
+    }))
+  } catch {
+    return [
+      { slug: 'azulejo-ceramico-blanco' },
+      { slug: 'piso-porcelanato-gris' },
+      { slug: 'revestimiento-piedra' }
+    ]
+  }
 }
 
-async function getProduct(slug: string): Promise<Product | null> {
-  try {
-    const products = await wooCommerce.getProducts({ slug }) as Product[]
-    return products[0] || null
-  } catch (error) {
-    console.error('Error fetching product:', error)
-    return null
-  }
+interface ProductPageProps {
+  params: { slug: string }  // En Next.js 14 NO es Promise
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const resolvedParams = await params
-  const product = await getProduct(resolvedParams.slug)
+  const { slug } = params
 
-  if (!product) {
-    notFound()
-  }
+  try {
+    const products = await wooCommerce.getProducts({ 
+      slug: slug,
+      per_page: '1'
+    }) as Product[]
 
-  return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Breadcrumb 
-          items={[
-            { label: 'Inicio', href: '/' },
-            { label: 'Tienda', href: '/tienda' },
-            { label: product.name, href: `/productos/${product.slug}` }
-          ]} 
-        />
+    if (!products || products.length === 0) {
+      notFound()
+    }
 
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Gallery */}
-          <div>
-            <ProductGallery images={product.images} name={product.name} />
+    const product = products[0]
+
+    if (!product) {
+      notFound()
+    }
+
+    return (
+      <div className="min-h-screen bg-secondary-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Breadcrumb 
+            items={[
+              { label: 'Inicio', href: '/' },
+              { label: 'Tienda', href: '/tienda' },
+              { label: product.name, href: `/productos/${product.slug}` }
+            ]} 
+          />
+
+          <div className="mt-8 space-y-12">
+            <ProductDetail product={product} />
+            
+            <RelatedProducts 
+              productId={product.id} 
+              categories={product.categories} 
+            />
           </div>
-
-          {/* Product Info */}
-          <div>
-            <ProductInfo product={product} />
-          </div>
-        </div>
-
-        {/* Product Details Tabs */}
-        <div className="mt-16">
-          <ProductTabs product={product} />
-        </div>
-
-        {/* Related Products */}
-        <div className="mt-16">
-          <Suspense fallback={<div className="h-96 animate-pulse bg-gray-100 rounded-lg" />}>
-            <RelatedProducts productId={product.id} categories={product.categories} />
-          </Suspense>
         </div>
       </div>
-    </div>
-  )
+    )
+  } catch {
+    notFound()
+  }
 }
 
+// Metadata para SEO en Next.js 14
 export async function generateMetadata({ params }: ProductPageProps) {
-  const resolvedParams = await params
-  const product = await getProduct(resolvedParams.slug)
-  
-  if (!product) {
-    return {
-      title: 'Producto no encontrado',
-    }
-  }
+  const { slug } = params
 
-  return {
-    title: `${product.name} | 3C Centro Cerámico Capital`,
-    description: product.short_description || product.description,
-    openGraph: {
-      title: product.name,
-      description: product.short_description || product.description,
-      images: product.images.map(img => ({
-        url: img.src,
-        alt: img.alt || product.name,
-      })),
-    },
+  try {
+    const products = await wooCommerce.getProducts({ 
+      slug: slug,
+      per_page: '1'
+    }) as Product[]
+
+    if (!products || products.length === 0) {
+      return {
+        title: 'Producto no encontrado | 3C Centro Cerámico Capital',
+        description: 'El producto que buscas no está disponible.'
+      }
+    }
+
+    const product = products[0]
+
+    if (!product) {
+      return {
+        title: 'Producto no encontrado | 3C Centro Cerámico Capital',
+        description: 'El producto que buscas no está disponible.'
+      }
+    }
+
+    return {
+      title: `${product.name} | 3C Centro Cerámico Capital`,
+      description: product.short_description || product.description?.replace(/<[^>]*>/g, '').substring(0, 160),
+      openGraph: {
+        title: product.name,
+        description: product.short_description,
+        images: product.images?.map(img => ({
+          url: img.src,
+          alt: img.alt || product.name
+        })) || []
+      }
+    }
+  } catch {
+    return {
+      title: 'Error | 3C Centro Cerámico Capital',
+      description: 'Error al cargar el producto.'
+    }
   }
 }
