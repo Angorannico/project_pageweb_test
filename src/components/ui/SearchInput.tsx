@@ -57,7 +57,7 @@ export function SearchInput({
     if (urlSearchValue !== searchValue) {
       setSearchValue(urlSearchValue)
     }
-  }, [searchParams])
+  }, [searchParams, searchValue])
 
   return (
     <div className={`relative w-full ${className}`}>
