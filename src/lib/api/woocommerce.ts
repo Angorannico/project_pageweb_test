@@ -2,21 +2,23 @@ interface WooCommerceConfig {
   baseURL: string;
   consumerKey: string;
   consumerSecret: string;
+  siteUrl: string;
 }
 
 class WooCommerceAPI {
   private config: WooCommerceConfig;
 
   constructor() {
+    const siteUrl = process.env.WOOCOMMERCE_URL;
     const baseURL = process.env.NEXT_PUBLIC_WORDPRESS_URL;
     const consumerKey = process.env.WOOCOMMERCE_CONSUMER_KEY;
     const consumerSecret = process.env.WOOCOMMERCE_CONSUMER_SECRET;
 
-    if (!baseURL || !consumerKey || !consumerSecret) {
+    if (!siteUrl || !baseURL || !consumerKey || !consumerSecret) {
       throw new Error('Variables de entorno de WooCommerce no configuradas');
     }
 
-    this.config = { baseURL, consumerKey, consumerSecret };
+    this.config = { siteUrl, baseURL, consumerKey, consumerSecret };
   }
 
   private getAuthString(): string {
