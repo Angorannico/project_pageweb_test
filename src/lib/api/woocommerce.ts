@@ -78,3 +78,4 @@ class WooCommerceAPI {
 }
 
 export const wooCommerce = new WooCommerceAPI();
+
