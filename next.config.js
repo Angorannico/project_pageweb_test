@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      domains: ['pages.pagespruebas.site'],
+      domains: ['mediumseagreen-crane-771753.hostingersite.com'],
       remotePatterns: [
         {
           protocol: 'https',
-          hostname: 'pages.pagespruebas.site',
+          hostname: 'mediumseagreen-crane-771753.hostingersite.com',
           port: '',
           pathname: '/wp-content/uploads/**',
         },
